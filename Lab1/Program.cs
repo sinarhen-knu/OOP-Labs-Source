@@ -76,7 +76,7 @@ public static class Program
         Console.WriteLine("Enter the value of b:");
         var b = Convert.ToDouble(Console.ReadLine());
 
-        var result = (1 - a) * (a + b) / (a - b) + Math.Pow(Math.Sin(a), 2);
+        var result = (1 - a) * (a + b) / (a - b) + Math.Cbrt(Math.Pow(a, 2));
 
         Console.WriteLine($"The result of the expression is: {result}");
     }
@@ -126,8 +126,7 @@ public static class Program
 
         for (var i = 1; i <= numberOfJudges; i++)
         {
-            Console.WriteLine($"Enter the score given by judge {i}:");
-            var score = Input.ReadAndValidateInput("Enter the score given by judge: ", double.Parse, s =>
+            var score = Input.ReadAndValidateInput($"Enter the score given by judge {i}: ", double.Parse, s =>
             {
                 if (s is >= 0 and <= 10) return true;
                 Console.WriteLine("Invalid input. Please enter a valid value. (0-10)");
