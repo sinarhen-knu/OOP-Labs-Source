@@ -1,4 +1,3 @@
-using System;
 using Utils;
 
 namespace Labs;
@@ -115,20 +114,40 @@ public static class Program
                 break;
         }
     }
-    
+
     private static void CalculateAverageScore()
     {
-        Console.WriteLine("Enter the scores given by 5 judges:");
-        var score1 = Input.ReadAndValidateInput("Score 1: ", Convert.ToDouble);
-        var score2 = Input.ReadAndValidateInput("Score 2: ", Convert.ToDouble);
-        var score3 = Input.ReadAndValidateInput("Score 3: ", Convert.ToDouble);
-        var score4 = Input.ReadAndValidateInput("Score 4: ", Convert.ToDouble);
-        var score5 = Input.ReadAndValidateInput("Score 5: ", Convert.ToDouble);
-        
-        var minScore = Math.Min(Math.Min(Math.Min(Math.Min(score1, score2), score3), score4), score5);
-        var maxScore = Math.Max(Math.Max(Math.Max(Math.Max(score1, score2), score3), score4), score5);
+        Console.WriteLine("Enter the number of judges:");
+        var numberOfJudges = Convert.ToInt32(Console.ReadLine());
 
-        var averageScore = (score1 + score2 + score3 + score4 + score5 - minScore - maxScore) / 3;
+        double sumOfScores = 0;
+        var minScore = double.MaxValue;
+        var maxScore = double.MinValue;
+
+        for (var i = 1; i <= numberOfJudges; i++)
+        {
+            Console.WriteLine($"Enter the score given by judge {i}:");
+            var score = Input.ReadAndValidateInput("Enter the score given by judge: ", double.Parse, s =>
+            {
+                if (s is >= 0 and <= 10) return true;
+                Console.WriteLine("Invalid input. Please enter a valid value. (0-10)");
+                return false;
+            });
+
+            sumOfScores += score;
+
+            if (score < minScore)
+            {
+                minScore = score;
+            }
+
+            if (score > maxScore)
+            {
+                maxScore = score;
+            }
+        }
+
+        var averageScore = (sumOfScores - minScore - maxScore) / (numberOfJudges - 2);
 
         Console.WriteLine($"The average score of the athlete is: {averageScore}");
     }
