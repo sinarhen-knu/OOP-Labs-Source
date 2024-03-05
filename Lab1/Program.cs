@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Utils;
 
 namespace Labs;
 
@@ -7,13 +8,14 @@ public static class Program
     public static void Main(string[] args)
     {
         DisplayPersonalData();
-        while (true)
+        var _continue = true;
+        while (_continue)
         {
             Console.WriteLine("Choose an option:");
-            Console.WriteLine("1. Calculate Triangle Properties");
+            Console.WriteLine("1. Calculate Rectangle Area");
             Console.WriteLine("2. Calculate Expression");
-            Console.WriteLine("3. Calculate Function Value");
-            Console.WriteLine("4. Calculate Sum");
+            Console.WriteLine("3. Display Color");
+            Console.WriteLine("4. Calculate Average Score");
             Console.WriteLine("5. Exit");
             Console.Write("Option: ");
 
@@ -22,16 +24,16 @@ public static class Program
             switch (option)
             {
                 case 1:
-                    CalculateTriangleProperties();
+                    CalculateRectangleArea();
                     break;
                 case 2:
                     CalculateExpression();
                     break;
                 case 3:
-                    CalculateFunctionValue();
+                    DisplayColor();
                     break;
                 case 4:
-                    CalculateSum();
+                    CalculateAverageScore();
                     break;
                 case 5:
                     return;
@@ -39,9 +41,12 @@ public static class Program
                     Console.WriteLine("Invalid option. Please try again.");
                     break;
             }
+            _continue = Input.ReadAndValidateInput("Do you want to continue? (yes/no): ", 
+                s => s.Equals("yes", StringComparison.CurrentCultureIgnoreCase) 
+                     || s.Equals("no", StringComparison.CurrentCultureIgnoreCase));
         }
+        
     }
-
     private static void DisplayPersonalData()
     {
         Console.WriteLine("Surname: Starosivets");
@@ -51,67 +56,80 @@ public static class Program
         Console.WriteLine("Course: 1");
         Console.WriteLine("E-mail: bohdan.starosivets@knu.ua");
     }
-
-    private static void CalculateTriangleProperties()
+    private static void CalculateRectangleArea()
     {
-        var a = Utils.Input.ReadAndValidateInput("Enter side a: ", Convert.ToDouble);
-        var b = Utils.Input.ReadAndValidateInput("Enter side b: ", Convert.ToDouble);
-        var c = Utils.Input.ReadAndValidateInput("Enter side c: ", Convert.ToDouble);
+        Console.WriteLine("Enter the length of the rectangle:");
+        var length = Convert.ToDouble(Console.ReadLine());
 
-        var medianA = 0.5 * Math.Sqrt(2*b*b + 2*c*c - a*a);
-        var medianB = 0.5 * Math.Sqrt(2*a*a + 2*c*c - b*b);
-        var medianC = 0.5 * Math.Sqrt(2*a*a + 2*b*b - c*c);
+        Console.WriteLine("Enter the width of the rectangle:");
+        var width = Convert.ToDouble(Console.ReadLine());
 
-        var bisectorA = 2 * Math.Sqrt(b*c*(a*a + b*c)) / (b + c);
-        var bisectorB = 2 * Math.Sqrt(a*c*(b*b + a*c)) / (a + c);
-        var bisectorC = 2 * Math.Sqrt(a*b*(c*c + a*b)) / (a + b);
+        var area = length * width;
 
-        Console.WriteLine($"Medians: {medianA}, {medianB}, {medianC}");
-        Console.WriteLine($"Bisectors: {bisectorA}, {bisectorB}, {bisectorC}");
+        Console.WriteLine($"The area of the rectangle is: {area}");
     }
 
     private static void CalculateExpression()
     {
-        Console.Write("Enter a: ");
+        Console.WriteLine("Enter the value of a:");
         var a = Convert.ToDouble(Console.ReadLine());
-        Console.Write("Enter b: ");
+
+        Console.WriteLine("Enter the value of b:");
         var b = Convert.ToDouble(Console.ReadLine());
-        Console.Write("Enter n: ");
-        var n = Convert.ToDouble(Console.ReadLine());
 
-        var x = (Math.Pow(a, 2) - Math.Pow(b, 2)) / (a * b) + n * (a + b) / b;
-        Console.WriteLine($"x = {x}");
+        var result = (1 - a) * (a + b) / (a - b) + Math.Pow(Math.Sin(a), 2);
+
+        Console.WriteLine($"The result of the expression is: {result}");
     }
-
-    private static void CalculateFunctionValue()
+    
+    private static void DisplayColor()
     {
-        Console.Write("Enter x: ");
-        var x = Convert.ToDouble(Console.ReadLine());
+        Console.WriteLine("Enter the color number (1-7):");
+        int colorNumber = Convert.ToInt32(Console.ReadLine());
 
-        var f = x switch
+        switch (colorNumber)
         {
-            >= -5 and <= 1 => Math.Pow(x, 2),
-            < -5 => 10 * x,
-            > 5 => 5 * Math.Sqrt(x),
-            _ => 1 / x
-        };
-
-        Console.WriteLine($"f(x) = {f}");
-    }
-
-    private static void CalculateSum()
-    {
-        Console.Write("Enter n: ");
-        var n = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Enter x: ");
-        var x = Convert.ToDouble(Console.ReadLine());
-
-        double s = 0;
-        for (var i = 1; i <= n; i++)
-        {
-            s += (i + 1) * Math.Pow(x + 1, i + 1);
+            case 1:
+                Console.WriteLine("Color: Red, RGB: (255, 0, 0)");
+                break;
+            case 2:
+                Console.WriteLine("Color: Orange, RGB: (255, 165, 0)");
+                break;
+            case 3:
+                Console.WriteLine("Color: Yellow, RGB: (255, 255, 0)");
+                break;
+            case 4:
+                Console.WriteLine("Color: Green, RGB: (0, 128, 0)");
+                break;
+            case 5:
+                Console.WriteLine("Color: Cyan, RGB: (0, 255, 255)");
+                break;
+            case 6:
+                Console.WriteLine("Color: Blue, RGB: (0, 0, 255)");
+                break;
+            case 7:
+                Console.WriteLine("Color: Violet, RGB: (238, 130, 238)");
+                break;
+            default:
+                Console.WriteLine("Invalid color number.");
+                break;
         }
+    }
+    
+    private static void CalculateAverageScore()
+    {
+        Console.WriteLine("Enter the scores given by 5 judges:");
+        var score1 = Input.ReadAndValidateInput("Score 1: ", Convert.ToDouble);
+        var score2 = Input.ReadAndValidateInput("Score 2: ", Convert.ToDouble);
+        var score3 = Input.ReadAndValidateInput("Score 3: ", Convert.ToDouble);
+        var score4 = Input.ReadAndValidateInput("Score 4: ", Convert.ToDouble);
+        var score5 = Input.ReadAndValidateInput("Score 5: ", Convert.ToDouble);
+        
+        var minScore = Math.Min(Math.Min(Math.Min(Math.Min(score1, score2), score3), score4), score5);
+        var maxScore = Math.Max(Math.Max(Math.Max(Math.Max(score1, score2), score3), score4), score5);
 
-        Console.WriteLine($"S = {s}");
+        var averageScore = (score1 + score2 + score3 + score4 + score5 - minScore - maxScore) / 3;
+
+        Console.WriteLine($"The average score of the athlete is: {averageScore}");
     }
 }
