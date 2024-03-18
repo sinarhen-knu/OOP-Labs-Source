@@ -4,6 +4,10 @@ namespace Lab2;
 
 public class Program
 {
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Hello world");
+    }
     public static void GenerateAndSortArray()
     {
         Console.WriteLine("Enter the size of the array:");
