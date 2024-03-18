@@ -4,20 +4,84 @@ namespace Lab2;
 
 public class Program
 {
+    private const int MinValue = -10;
+    private const int MaxValue = 10;
+    private const double Epsilon = 0.0001;
+
     public static void Main(string[] args)
     {
         Console.WriteLine("Hello world");
+        int[,]? matrix = null;
+        var array = GenerateAndSortArray();
+
+
+        while (true)
+        {
+            var option = GetOptionFromUser();
+            switch (option)
+            {
+                case 1:
+                    FindPrimesInArray(array);
+                    break;
+                case 2:
+                    RearrangeArray(array);
+                    break;
+                case 3:
+                    FindMaxMinInArray(array);
+                    break;
+                case 4:
+                    FindElementsInRange(array);
+                    break;
+                case 5:
+                    matrix = GenerateAndManipulateMatrix();
+                    break;
+                case 6:
+                    if (matrix == null)
+                    {
+                        Console.WriteLine("Matrix is not initialized. use method 5.");
+                        break;
+                    }
+                    FindMinAndModifyMatrix(matrix);
+                    break;
+                case 7:
+                    FindCharactersInParentheses();
+                    break;
+                case 9:
+                    SolveNonLinearEquation();
+                    break;
+                case 10:
+                    return;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
+            }
+        }
     }
-    public static void GenerateAndSortArray()
+    
+    private static int GetOptionFromUser()
     {
-        Console.WriteLine("Enter the size of the array:");
+        Console.WriteLine("Choose an option:");
+        Console.WriteLine("1. Generate and sort array");
+        Console.WriteLine("2. Find primes in array");
+        Console.WriteLine("3. Rearrange array");
+        Console.WriteLine("4. Find max and min in array");
+        Console.WriteLine("5. Find elements in range");
+        Console.WriteLine("6. Generate and manipulate matrix");
+        Console.WriteLine("7. Find min and modify matrix");
+        Console.WriteLine("8. Find characters in parentheses");
+        Console.WriteLine("9. Solve non-linear equation");
+        Console.WriteLine("10. Exit");
+        Console.Write("Option: ");
+
+        return Convert.ToInt32(Console.ReadLine());
+    }
+    public static int[] GenerateAndSortArray()
+    {
         int size = Input.ReadAndValidateInput("Enter the size of array", Convert.ToInt32);
 
-        Console.WriteLine("Enter the minimum value:");
-        int minValue = Input.ReadAndValidateInput("Enter the size of array", Convert.ToInt32);
+        int minValue = Input.ReadAndValidateInput("Enter the minimum value of array: ", Convert.ToInt32);
 
-        Console.WriteLine("Enter the maximum value:");
-        int maxValue = Input.ReadAndValidateInput("Enter the size of array", Convert.ToInt32);
+        int maxValue = Input.ReadAndValidateInput("Enter the maximum value of array: ", Convert.ToInt32);
 
         int[] array = new int[size];
         Random random = new Random();
@@ -40,14 +104,14 @@ public class Program
         {
             Console.Write(item + " ");
         }
+
+        return array;
     }
     
     public static void FindPrimesInArray(int[] array)
     {
-        Console.WriteLine("Enter the minimum value for the prime range:");
         int minValue = Input.ReadAndValidateInput("Enter the minimum value for the prime range", Convert.ToInt32);
 
-        Console.WriteLine("Enter the maximum value for the prime range:");
         int maxValue = Input.ReadAndValidateInput("Enter the maximum value for the prime range", Convert.ToInt32);
 
         List<int> primes = new List<int>();
@@ -159,16 +223,29 @@ public class Program
             }
         }
 
-        Console.WriteLine($"Max negative number: {maxNegative} at index {maxNegativeIndex}");
-        Console.WriteLine($"Min positive number: {minPositive} at index {minPositiveIndex}");
+        if (maxNegativeIndex != -1)
+        {
+            Console.WriteLine($"Max negative number: {maxNegative} at index {maxNegativeIndex}");
+        }
+        else
+        {
+            Console.WriteLine("No negative numbers in the array.");
+        }
+
+        if (minPositiveIndex != -1)
+        {
+            Console.WriteLine($"Min positive number: {minPositive} at index {minPositiveIndex}");
+        }
+        else
+        {
+            Console.WriteLine("No positive numbers in the array.");
+        }
     }
 
     public static void FindElementsInRange(int[] array)
     {
-        Console.WriteLine("Enter the minimum value for the range:");
         int minValue = Input.ReadAndValidateInput("Enter the minimum value for the range", Convert.ToInt32);
 
-        Console.WriteLine("Enter the maximum value for the range:");
         int maxValue = Input.ReadAndValidateInput("Enter the maximum value for the range", Convert.ToInt32);
 
         List<int> elementsInRange = new List<int>();
@@ -195,21 +272,17 @@ public class Program
         }
     }
 
-    public static void GenerateAndManipulateMatrix()
+    public static int[,]? GenerateAndManipulateMatrix()
     {
-        Console.WriteLine("Enter the number of rows in the matrix:");
         int rows = Input.ReadAndValidateInput("Enter the number of rows in the matrix", Convert.ToInt32);
 
-        Console.WriteLine("Enter the number of columns in the matrix:");
         int columns = Input.ReadAndValidateInput("Enter the number of columns in the matrix", Convert.ToInt32);
 
-        Console.WriteLine("Enter the minimum value for the matrix elements:");
         int minValue = Input.ReadAndValidateInput("Enter the minimum value for the matrix elements", Convert.ToInt32);
 
-        Console.WriteLine("Enter the maximum value for the matrix elements:");
         int maxValue = Input.ReadAndValidateInput("Enter the maximum value for the matrix elements", Convert.ToInt32);
 
-        int[,] matrix = new int[rows, columns];
+        int[,]? matrix = new int[rows, columns];
         Random random = new Random();
 
         for (int i = 0; i < rows; i++)
@@ -224,9 +297,10 @@ public class Program
         PrintMatrix(matrix);
 
         // Further matrix manipulations go here...
+        return matrix;
     }
 
-    private static void PrintMatrix(int[,] matrix)
+    private static void PrintMatrix(int[,]? matrix)
     {
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
@@ -264,7 +338,7 @@ public class Program
         }
     }
     
-    public static void FindMinAndModifyMatrix(int[,] matrix)
+    public static void FindMinAndModifyMatrix(int[,]? matrix)
     {
         int min = int.MaxValue;
         int minRow = -1;
@@ -285,7 +359,7 @@ public class Program
 
         Console.WriteLine($"Minimum element: {min} at row {minRow} and column {minCol}");
 
-        int[,] newMatrix = new int[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
+        int[,]? newMatrix = new int[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
 
         int p = 0;
         for (int i = 0; i < matrix.GetLength(0); i++)
@@ -340,5 +414,40 @@ public class Program
         }
 
         Console.WriteLine($"Characters within parentheses: {result}");
+    }
+    
+    public static void SolveNonLinearEquation()
+    {
+        double a = -10;
+        double b = 10;
+        double epsilon = 0.0001;
+
+        if (Function(a) * Function(b) >= 0)
+        {
+            Console.WriteLine("You have not assumed right a and b\n");
+            return;
+        }
+
+        double c = a;
+
+        while ((b - a) >= epsilon)
+        {
+            c = (a + b) / 2;
+
+            if (Function(c) == 0.0)
+                break;
+
+            else if (Function(c) * Function(a) < 0)
+                b = c;
+            else
+                a = c;
+        }
+
+        Console.WriteLine($"The value of root is : {c}");
+    }
+
+    private static double Function(double x)
+    {
+        return 5 * Math.Pow(x, 4) + 4 * Math.Pow(x, 3) - 6 * Math.Pow(x, 2) + 5;
     }
 }
