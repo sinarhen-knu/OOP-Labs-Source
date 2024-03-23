@@ -17,11 +17,10 @@ public class Program
         while (true)
         {
             Console.WriteLine("Choose an option:");
-            Console.WriteLine("1. Find prime numbers in array");
-            Console.WriteLine("2. Rearrange array");
-            Console.WriteLine("3. Find max and min in array");
-            Console.WriteLine("4. Find elements in range");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("1. Rearrange array");
+            Console.WriteLine("2. Find max and min in array");
+            Console.WriteLine("3. Find elements in range");
+            Console.WriteLine("4. Exit");
             Console.Write("Option: ");
 
             var option = Convert.ToInt32(Console.ReadLine());
@@ -29,18 +28,15 @@ public class Program
             switch (option)
             {
                 case 1:
-                    FindPrimesInArray();
-                    break;
-                case 2:
                     RearrangeArray(array);
                     break;
-                case 3:
+                case 2:
                     FindMaxMinInArray(array);
                     break;
-                case 4:
+                case 3:
                     FindElementsInRange(array);
                     break;
-                case 5:
+                case 4:
                     return;
                 default:
                     Console.WriteLine("Invalid option. Please try again.");
@@ -89,7 +85,8 @@ public class Program
         {
             Console.WriteLine("Choose an option:");
             Console.WriteLine("1. Find min and modify matrix");
-            Console.WriteLine("2. Exit");
+            Console.WriteLine("2. Analyze university ratings");
+            Console.WriteLine("3. Exit");
             Console.Write("Option: ");
 
             var option = Convert.ToInt32(Console.ReadLine());
@@ -100,6 +97,9 @@ public class Program
                     FindMinAndModifyMatrix(matrix);
                     break;
                 case 2:
+                    AnalyzeUniversityRatings(matrix);
+                    break;
+                case 3:
                     return;
                 default:
                     Console.WriteLine("Invalid option. Please try again.");
@@ -172,6 +172,55 @@ public class Program
         return array;
     }
 
+    private static void AnalyzeUniversityRatings(int[,] matrix)
+    {
+        var highestRatingUniversity = -1;
+        var highestRating = int.MinValue;
+        var lowestRatingUniversity = -1;
+        var lowestRating = int.MaxValue;
+        var highestRatingYear = -1;
+        var highestYearRating = int.MinValue;
+
+        for (var i = 0; i < matrix.GetLength(0); i++)
+        {
+            var totalRating = 0;
+            for (var j = 0; j < matrix.GetLength(1); j++)
+            {
+                totalRating += matrix[i, j];
+            }
+
+            if (totalRating > highestRating)
+            {
+                highestRating = totalRating;
+                highestRatingUniversity = i;
+            }
+
+            if (totalRating < lowestRating)
+            {
+                lowestRating = totalRating;
+                lowestRatingUniversity = i;
+            }
+        }
+
+        for (var j = 0; j < matrix.GetLength(1); j++)
+        {
+            var totalRating = 0;
+            for (var i = 0; i < matrix.GetLength(0); i++)
+            {
+                totalRating += matrix[i, j];
+            }
+
+            if (totalRating > highestYearRating)
+            {
+                highestYearRating = totalRating;
+                highestRatingYear = j;
+            }
+        }
+
+        Console.WriteLine($"University with the highest rating over all years: {highestRatingUniversity + 1}");
+        Console.WriteLine($"Year with the highest total rating: {highestRatingYear + 1}");
+        Console.WriteLine($"University with the lowest total rating over all years: {lowestRatingUniversity + 1}");
+    }
     private static void FindPrimesInArray()
     {
         var lowerBounds = Input.ReadAndValidateInput("Enter non-negative number: ", Convert.ToInt32, num =>
@@ -228,41 +277,6 @@ public class Program
             }
         }
     }
-    //
-    // private static void FindPrimesInArray()
-    // {
-    //     var array = new List<int> ();
-    //     for (int i = 0; i < 100; i++)
-    //     {
-    //         array.Add(i);
-    //     }
-    //     var primes = new bool[array.Count];
-    //
-    //     for (var i = 2; i <= array.Count; i++)
-    //     {
-    //         primes[i] = true;
-    //     }
-    //
-    //     for (var i = 2; i * i <= array.Count; i++)
-    //     {
-    //         if (primes[i])
-    //         {
-    //             for (var j = i * i; j <= array.Count; j += i)
-    //             {
-    //                 primes[j] = false;
-    //             }
-    //         }
-    //     }
-    //
-    //     Console.WriteLine("Prime numbers in the array: ");
-    //     for (var i = 0; i < array.Count; i++)
-    //     {
-    //         if (primes[array.ElementAt(i)])
-    //         {
-    //             Console.Write(array.ElementAt(i) + " ");
-    //         }
-    //     }
-    // }
 
     private static void RearrangeArray(IList<int> array)
     {
