@@ -2,7 +2,7 @@
 
 namespace Lab2;
 
-public class Program
+class Program
 {
     private static void DisplayPersonalData()
     {
@@ -89,7 +89,7 @@ public class Program
             Console.WriteLine("3. Exit");
             Console.Write("Option: ");
 
-            var option = Convert.ToInt32(Console.ReadLine());
+            var option = Input.ReadAndValidateInput("Enter the option: ", Convert.ToInt32);
 
             switch (option)
             {
@@ -113,7 +113,14 @@ public class Program
         DisplayPersonalData();
         while (true)
         {
-            var option = GetOptionFromUser();
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("1. Generate and sort array");
+            Console.WriteLine("2. Generate and manipulate matrix");
+            Console.WriteLine("3. Other operations");
+            Console.WriteLine("4. Exit");
+            Console.Write("Option: ");
+            
+            var option = Input.ReadAndValidateInput("Enter the option: ", Convert.ToInt32);
             switch (option)
             {
                 case 1:
@@ -135,19 +142,7 @@ public class Program
             }
         }
     }
-
-    private static int GetOptionFromUser()
-    {
-        Console.WriteLine("Choose an option:");
-        Console.WriteLine("1. Generate and sort array");
-        Console.WriteLine("2. Generate and manipulate matrix");
-        Console.WriteLine("3. Other operations");
-        Console.WriteLine("4. Exit");
-        Console.Write("Option: ");
-
-        return Convert.ToInt32(Console.ReadLine());
-    }
-
+    
     private static int[] GenerateAndSortArray()
     {
         var size = Input.ReadAndValidateInput("Enter the size of array", Convert.ToInt32);
@@ -305,14 +300,14 @@ public class Program
         foreach (var item in array) Console.Write(item + " ");
     }
 
-    private static void FindMaxMinInArray(int[] array)
+    private static void FindMaxMinInArray(IReadOnlyList<int> array)
     {
         var maxNegative = int.MinValue;
         var minPositive = int.MaxValue;
         var maxNegativeIndex = -1;
         var minPositiveIndex = -1;
 
-        for (var i = 0; i < array.Length; i++)
+        for (var i = 0; i < array.Count; i++)
             if (array[i] < 0 && array[i] > maxNegative)
             {
                 maxNegative = array[i];
@@ -324,28 +319,22 @@ public class Program
                 minPositiveIndex = i;
             }
 
-        if (maxNegativeIndex != -1)
-            Console.WriteLine($"Max negative number: {maxNegative} at index {maxNegativeIndex}");
-        else
-            Console.WriteLine("No negative numbers in the array.");
+        Console.WriteLine(maxNegativeIndex != -1
+            ? $"Max negative number: {maxNegative} at index {maxNegativeIndex}"
+            : "No negative numbers in the array.");
 
-        if (minPositiveIndex != -1)
-            Console.WriteLine($"Min positive number: {minPositive} at index {minPositiveIndex}");
-        else
-            Console.WriteLine("No positive numbers in the array.");
+        Console.WriteLine(minPositiveIndex != -1
+            ? $"Min positive number: {minPositive} at index {minPositiveIndex}"
+            : "No positive numbers in the array.");
     }
 
-    private static void FindElementsInRange(int[] array)
+    private static void FindElementsInRange(IEnumerable<int> array)
     {
         var minValue = Input.ReadAndValidateInput("Enter the minimum value for the range", Convert.ToInt32);
 
         var maxValue = Input.ReadAndValidateInput("Enter the maximum value for the range", Convert.ToInt32);
 
-        var elementsInRange = new List<int>();
-
-        for (var i = 0; i < array.Length; i++)
-            if (array[i] >= minValue && array[i] <= maxValue)
-                elementsInRange.Add(array[i]);
+        var elementsInRange = array.Where(t => t >= minValue && t <= maxValue).ToList();
 
         if (elementsInRange.Count == 0)
         {
@@ -388,9 +377,9 @@ public class Program
         }
     }
 
-    private static void ShellSort(int[] array)
+    private static void ShellSort(IList<int> array)
     {
-        var n = array.Length;
+        var n = array.Count;
         var gap = n / 2;
         int temp;
 
