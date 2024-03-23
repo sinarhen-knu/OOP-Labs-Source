@@ -4,24 +4,32 @@ namespace Lab2;
 
 public class Program
 {
-    private const int MinValue = -10;
-    private const int MaxValue = 10;
-    private const double Epsilon = 0.0001;
-
-    public static void Main(string[] args)
+    private static void DisplayPersonalData()
     {
-        Console.WriteLine("Hello world");
-        int[,]? matrix = null;
-        var array = GenerateAndSortArray();
+        Console.WriteLine("Name: Starosivets Bohdan");
+        Console.WriteLine("Group: SE-12");
+        Console.WriteLine("Course: 1");
+        Console.WriteLine("E-mail: bohdan.starosivets@knu.ua");
+    }
 
-
+    private static void MakeArrayOperations(int[] array)
+    {
         while (true)
         {
-            var option = GetOptionFromUser();
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("1. Find prime numbers in array");
+            Console.WriteLine("2. Rearrange array");
+            Console.WriteLine("3. Find max and min in array");
+            Console.WriteLine("4. Find elements in range");
+            Console.WriteLine("5. Exit");
+            Console.Write("Option: ");
+
+            var option = Convert.ToInt32(Console.ReadLine());
+
             switch (option)
             {
                 case 1:
-                    FindPrimesInArray(array);
+                    FindPrimesInArray();
                     break;
                 case 2:
                     RearrangeArray(array);
@@ -33,23 +41,6 @@ public class Program
                     FindElementsInRange(array);
                     break;
                 case 5:
-                    matrix = GenerateAndManipulateMatrix();
-                    break;
-                case 6:
-                    if (matrix == null)
-                    {
-                        Console.WriteLine("Matrix is not initialized. use method 5.");
-                        break;
-                    }
-                    FindMinAndModifyMatrix(matrix);
-                    break;
-                case 7:
-                    FindCharactersInParentheses();
-                    break;
-                case 9:
-                    SolveNonLinearEquation();
-                    break;
-                case 10:
                     return;
                 default:
                     Console.WriteLine("Invalid option. Please try again.");
@@ -57,160 +48,257 @@ public class Program
             }
         }
     }
-    
+
+    private static void MakeOtherOperations()
+    {
+        while (true)
+        {
+            
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("1. Find characters in parentheses");
+            Console.WriteLine("2. Solve non-linear equation");
+            Console.WriteLine("3. Find prime numbers in array ");
+            Console.WriteLine("4. Exit");
+            Console.Write("Option: ");
+
+            var option = Convert.ToInt32(Console.ReadLine());
+
+            switch (option)
+            {
+                case 1:
+                    FindCharactersInParentheses();
+                    break;
+                case 2:
+                    SolveNonLinearEquation();
+                    break;
+                case 3:
+                    FindPrimesInArray();
+                    break;
+                case 4:
+                    return;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    private static void MakeMatrixOperations(int[,] matrix)
+    {
+        while (true)
+        {
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("1. Find min and modify matrix");
+            Console.WriteLine("2. Exit");
+            Console.Write("Option: ");
+
+            var option = Convert.ToInt32(Console.ReadLine());
+
+            switch (option)
+            {
+                case 1:
+                    FindMinAndModifyMatrix(matrix);
+                    break;
+                case 2:
+                    return;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
+            }
+        }
+    }
+
+    public static void Main(string[] args)
+    {
+        DisplayPersonalData();
+        while (true)
+        {
+            var option = GetOptionFromUser();
+            switch (option)
+            {
+                case 1:
+                    var array = GenerateAndSortArray();
+                    MakeArrayOperations(array);
+                    break;
+                case 2:
+                    var matrix = GenerateAndManipulateMatrix();
+                    MakeMatrixOperations(matrix);
+                    break;
+                case 3:
+                    MakeOtherOperations();
+                    break;
+                case 4:
+                    return;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
+            }
+        }
+    }
+
     private static int GetOptionFromUser()
     {
         Console.WriteLine("Choose an option:");
         Console.WriteLine("1. Generate and sort array");
-        Console.WriteLine("2. Find primes in array");
-        Console.WriteLine("3. Rearrange array");
-        Console.WriteLine("4. Find max and min in array");
-        Console.WriteLine("5. Find elements in range");
-        Console.WriteLine("6. Generate and manipulate matrix");
-        Console.WriteLine("7. Find min and modify matrix");
-        Console.WriteLine("8. Find characters in parentheses");
-        Console.WriteLine("9. Solve non-linear equation");
-        Console.WriteLine("10. Exit");
+        Console.WriteLine("2. Generate and manipulate matrix");
+        Console.WriteLine("3. Other operations");
+        Console.WriteLine("4. Exit");
         Console.Write("Option: ");
 
         return Convert.ToInt32(Console.ReadLine());
     }
-    public static int[] GenerateAndSortArray()
+
+    private static int[] GenerateAndSortArray()
     {
-        int size = Input.ReadAndValidateInput("Enter the size of array", Convert.ToInt32);
+        var size = Input.ReadAndValidateInput("Enter the size of array", Convert.ToInt32);
 
-        int minValue = Input.ReadAndValidateInput("Enter the minimum value of array: ", Convert.ToInt32);
+        var minValue = Input.ReadAndValidateInput("Enter the minimum value of array: ", Convert.ToInt32);
 
-        int maxValue = Input.ReadAndValidateInput("Enter the maximum value of array: ", Convert.ToInt32);
+        var maxValue = Input.ReadAndValidateInput("Enter the maximum value of array: ", Convert.ToInt32);
 
-        int[] array = new int[size];
-        Random random = new Random();
+        var array = new int[size];
+        var random = new Random();
 
-        for (int i = 0; i < size; i++)
-        {
-            array[i] = random.Next(minValue, maxValue);
-        }
+        for (var i = 0; i < size; i++) array[i] = random.Next(minValue, maxValue);
 
         Console.WriteLine("Array before sorting:");
-        foreach (var item in array)
-        {
-            Console.Write(item + " ");
-        }
+        foreach (var item in array) Console.Write(item + " ");
 
         ShellSort(array);
 
         Console.WriteLine("\nArray after sorting:");
-        foreach (var item in array)
-        {
-            Console.Write(item + " ");
-        }
+        foreach (var item in array) Console.Write(item + " ");
 
         return array;
     }
-    
-    public static void FindPrimesInArray(int[] array)
+
+    private static void FindPrimesInArray()
     {
-        int minValue = Input.ReadAndValidateInput("Enter the minimum value for the prime range", Convert.ToInt32);
-
-        int maxValue = Input.ReadAndValidateInput("Enter the maximum value for the prime range", Convert.ToInt32);
-
-        List<int> primes = new List<int>();
-
-        for (int i = 0; i < array.Length; i++)
+        var lowerBounds = Input.ReadAndValidateInput("Enter non-negative number: ", Convert.ToInt32, num =>
         {
-            if (array[i] >= minValue && array[i] <= maxValue && IsPrime(array[i]))
+            if (num >= 0)
+                return true;
+            Console.WriteLine("Please enter non negative number. " + num + " is negative");
+            return false;
+        });
+
+        var upperBounds = Input.ReadAndValidateInput("Enter non-negative number more than: " + lowerBounds, Convert.ToInt32, num =>
+        {
+            switch (num)
             {
-                primes.Add(array[i]);
+                case >= 0 when num > lowerBounds:
+                    return true;
+                case <= 0 when num > lowerBounds:
+                    Console.WriteLine("Please enter non negative number. " + num + " is negative");
+                    return false;
+                default:
+                    Console.WriteLine("Lower bounds of array is " + lowerBounds + ". Please enter value more than this");
+                    return true;
+            }
+        });
+
+        var array = new List<int>();
+        for (var i = lowerBounds; i <= upperBounds; i++)
+        {
+            array.Add(i);
+        }
+
+        var primes = new bool[upperBounds + 1];
+        
+        for (int i = 0; i <= upperBounds; i++)
+        {
+            primes[i] = true;
+        }
+
+        for (int i = 2; i * i < array.Count; i++)
+        {
+            if (!primes[i]) continue;
+            for (int j = i * 2; j < array.Count; j += i)
+            {
+                primes[j] = false;
             }
         }
-
-        if (primes.Count == 0)
+            
+        Console.WriteLine("Prime numbers in array: ");
+        for (int i = 0; i < array.Count; i++)
         {
-            Console.WriteLine("No prime numbers found in the array within the given range.");
-        }
-        else
-        {
-            Console.WriteLine("Prime numbers in the array within the given range:");
-            foreach (var prime in primes)
+            if (primes[i])
             {
-                Console.Write(prime + " ");
+                Console.Write(i + " ");
             }
         }
     }
+    //
+    // private static void FindPrimesInArray()
+    // {
+    //     var array = new List<int> ();
+    //     for (int i = 0; i < 100; i++)
+    //     {
+    //         array.Add(i);
+    //     }
+    //     var primes = new bool[array.Count];
+    //
+    //     for (var i = 2; i <= array.Count; i++)
+    //     {
+    //         primes[i] = true;
+    //     }
+    //
+    //     for (var i = 2; i * i <= array.Count; i++)
+    //     {
+    //         if (primes[i])
+    //         {
+    //             for (var j = i * i; j <= array.Count; j += i)
+    //             {
+    //                 primes[j] = false;
+    //             }
+    //         }
+    //     }
+    //
+    //     Console.WriteLine("Prime numbers in the array: ");
+    //     for (var i = 0; i < array.Count; i++)
+    //     {
+    //         if (primes[array.ElementAt(i)])
+    //         {
+    //             Console.Write(array.ElementAt(i) + " ");
+    //         }
+    //     }
+    // }
 
-    private static bool IsPrime(int number)
+    private static void RearrangeArray(IList<int> array)
     {
-        if (number <= 1) return false;
-        if (number == 2) return true;
-        if (number % 2 == 0) return false;
+        var negativeNumbers = new List<int>();
+        var positiveNumbers = new List<int>();
+        var zeros = new List<int>();
 
-        var boundary = (int)Math.Floor(Math.Sqrt(number));
-
-        for (int i = 3; i <= boundary; i += 2)
-        {
-            if (number % i == 0)
-                return false;
-        }
-
-        return true;
-    }
-
-    public static void RearrangeArray(int[] array)
-    {
-        List<int> negativeNumbers = new List<int>();
-        List<int> positiveNumbers = new List<int>();
-        List<int> zeros = new List<int>();
-
-        for (int i = 0; i < array.Length; i++)
-        {
+        for (var i = 0; i < array.Count; i++)
             if (array[i] < 0)
-            {
                 negativeNumbers.Add(array[i]);
-            }
             else if (array[i] > 0)
-            {
                 positiveNumbers.Add(array[i]);
-            }
             else
-            {
                 zeros.Add(array[i]);
-            }
-        }
 
         int index = 0, negativeIndex = 0, positiveIndex = 0, zeroIndex = 0;
 
-        while (index < array.Length)
+        while (index < array.Count)
         {
-            if (negativeIndex < negativeNumbers.Count)
-            {
-                array[index++] = negativeNumbers[negativeIndex++];
-            }
-            if (positiveIndex < positiveNumbers.Count)
-            {
-                array[index++] = positiveNumbers[positiveIndex++];
-            }
-            if (zeroIndex < zeros.Count)
-            {
-                array[index++] = zeros[zeroIndex++];
-            }
+            if (negativeIndex < negativeNumbers.Count) array[index++] = negativeNumbers[negativeIndex++];
+            if (positiveIndex < positiveNumbers.Count) array[index++] = positiveNumbers[positiveIndex++];
+            if (zeroIndex < zeros.Count) array[index++] = zeros[zeroIndex++];
         }
 
         Console.WriteLine("Array after rearranging:");
-        foreach (var item in array)
-        {
-            Console.Write(item + " ");
-        }
+        foreach (var item in array) Console.Write(item + " ");
     }
 
-    public static void FindMaxMinInArray(int[] array)
+    private static void FindMaxMinInArray(int[] array)
     {
-        int maxNegative = int.MinValue;
-        int minPositive = int.MaxValue;
-        int maxNegativeIndex = -1;
-        int minPositiveIndex = -1;
+        var maxNegative = int.MinValue;
+        var minPositive = int.MaxValue;
+        var maxNegativeIndex = -1;
+        var minPositiveIndex = -1;
 
-        for (int i = 0; i < array.Length; i++)
-        {
+        for (var i = 0; i < array.Length; i++)
             if (array[i] < 0 && array[i] > maxNegative)
             {
                 maxNegative = array[i];
@@ -221,42 +309,29 @@ public class Program
                 minPositive = array[i];
                 minPositiveIndex = i;
             }
-        }
 
         if (maxNegativeIndex != -1)
-        {
             Console.WriteLine($"Max negative number: {maxNegative} at index {maxNegativeIndex}");
-        }
         else
-        {
             Console.WriteLine("No negative numbers in the array.");
-        }
 
         if (minPositiveIndex != -1)
-        {
             Console.WriteLine($"Min positive number: {minPositive} at index {minPositiveIndex}");
-        }
         else
-        {
             Console.WriteLine("No positive numbers in the array.");
-        }
     }
 
-    public static void FindElementsInRange(int[] array)
+    private static void FindElementsInRange(int[] array)
     {
-        int minValue = Input.ReadAndValidateInput("Enter the minimum value for the range", Convert.ToInt32);
+        var minValue = Input.ReadAndValidateInput("Enter the minimum value for the range", Convert.ToInt32);
 
-        int maxValue = Input.ReadAndValidateInput("Enter the maximum value for the range", Convert.ToInt32);
+        var maxValue = Input.ReadAndValidateInput("Enter the maximum value for the range", Convert.ToInt32);
 
-        List<int> elementsInRange = new List<int>();
+        var elementsInRange = new List<int>();
 
-        for (int i = 0; i < array.Length; i++)
-        {
+        for (var i = 0; i < array.Length; i++)
             if (array[i] >= minValue && array[i] <= maxValue)
-            {
                 elementsInRange.Add(array[i]);
-            }
-        }
 
         if (elementsInRange.Count == 0)
         {
@@ -265,64 +340,51 @@ public class Program
         else
         {
             Console.WriteLine("Elements in the array within the given range:");
-            foreach (var element in elementsInRange)
-            {
-                Console.Write(element + " ");
-            }
+            foreach (var element in elementsInRange) Console.Write(element + " ");
         }
     }
 
-    public static int[,]? GenerateAndManipulateMatrix()
+    private static int[,] GenerateAndManipulateMatrix()
     {
-        int rows = Input.ReadAndValidateInput("Enter the number of rows in the matrix", Convert.ToInt32);
+        var rows = Input.ReadAndValidateInput("Enter the number of rows in the matrix", Convert.ToInt32);
+        var columns = Input.ReadAndValidateInput("Enter the number of columns in the matrix", Convert.ToInt32);
+        var minValue = Input.ReadAndValidateInput("Enter the minimum value for the matrix elements", Convert.ToInt32);
+        var maxValue = Input.ReadAndValidateInput("Enter the maximum value for the matrix elements", Convert.ToInt32);
 
-        int columns = Input.ReadAndValidateInput("Enter the number of columns in the matrix", Convert.ToInt32);
+        var matrix = new int[rows, columns];
+        var random = new Random();
 
-        int minValue = Input.ReadAndValidateInput("Enter the minimum value for the matrix elements", Convert.ToInt32);
-
-        int maxValue = Input.ReadAndValidateInput("Enter the maximum value for the matrix elements", Convert.ToInt32);
-
-        int[,]? matrix = new int[rows, columns];
-        Random random = new Random();
-
-        for (int i = 0; i < rows; i++)
-        {
-            for (int j = 0; j < columns; j++)
-            {
-                matrix[i, j] = random.Next(minValue, maxValue);
-            }
-        }
+        for (var i = 0; i < rows; i++)
+        for (var j = 0; j < columns; j++)
+            matrix[i, j] = random.Next(minValue, maxValue);
 
         Console.WriteLine("Generated matrix:");
         PrintMatrix(matrix);
 
-        // Further matrix manipulations go here...
+
         return matrix;
     }
 
-    private static void PrintMatrix(int[,]? matrix)
+    private static void PrintMatrix(int[,] matrix)
     {
-        for (int i = 0; i < matrix.GetLength(0); i++)
+        for (var i = 0; i < matrix.GetLength(0); i++)
         {
-            for (int j = 0; j < matrix.GetLength(1); j++)
-            {
-                Console.Write(matrix[i, j] + " ");
-            }
+            for (var j = 0; j < matrix.GetLength(1); j++) Console.Write(matrix[i, j] + " ");
             Console.WriteLine();
         }
     }
 
     private static void ShellSort(int[] array)
     {
-        int n = array.Length;
-        int gap = n / 2;
+        var n = array.Length;
+        var gap = n / 2;
         int temp;
 
         while (gap > 0)
         {
-            for (int i = 0; i + gap < n; i++)
+            for (var i = 0; i + gap < n; i++)
             {
-                int j = i + gap;
+                var j = i + gap;
                 temp = array[j];
 
                 while (j - gap >= 0 && temp < array[j - gap])
@@ -337,39 +399,35 @@ public class Program
             gap = gap / 2;
         }
     }
-    
-    public static void FindMinAndModifyMatrix(int[,]? matrix)
-    {
-        int min = int.MaxValue;
-        int minRow = -1;
-        int minCol = -1;
 
-        for (int i = 0; i < matrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < matrix.GetLength(1); j++)
+    private static void FindMinAndModifyMatrix(int[,] matrix)
+    {
+        var min = int.MaxValue;
+        var minRow = -1;
+        var minCol = -1;
+
+        for (var i = 0; i < matrix.GetLength(0); i++)
+        for (var j = 0; j < matrix.GetLength(1); j++)
+            if (matrix[i, j] < min)
             {
-                if (matrix[i, j] < min)
-                {
-                    min = matrix[i, j];
-                    minRow = i;
-                    minCol = j;
-                }
+                min = matrix[i, j];
+                minRow = i;
+                minCol = j;
             }
-        }
 
         Console.WriteLine($"Minimum element: {min} at row {minRow} and column {minCol}");
 
-        int[,]? newMatrix = new int[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
+        var newMatrix = new int[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
 
-        int p = 0;
-        for (int i = 0; i < matrix.GetLength(0); i++)
+        var p = 0;
+        for (var i = 0; i < matrix.GetLength(0); i++)
         {
             if (i == minRow)
                 continue;
 
-            int q = 0;
+            var q = 0;
 
-            for (int j = 0; j < matrix.GetLength(1); j++)
+            for (var j = 0; j < matrix.GetLength(1); j++)
             {
                 if (j == minCol)
                     continue;
@@ -384,43 +442,47 @@ public class Program
         Console.WriteLine("Matrix after removing row and column of minimum element:");
         PrintMatrix(newMatrix);
     }
-    
-    public static void FindCharactersInParentheses()
+
+
+    private static void FindCharactersInParentheses()
     {
-        Console.WriteLine("Enter a string:");
-        string input = Console.ReadLine();
+        var input = Input.ReadAndValidateInput("Enter a string: ", s => s, s => s.Length > 0);
 
-        Stack<char> stack = new Stack<char>();
-        string result = "";
+        var stack = new Stack<char>();
+        var result = "";
 
-        foreach (char c in input)
-        {
-            if (c == '(')
+        foreach (var c in input)
+            switch (c)
             {
-                stack.Push(c);
-            }
-            else if (c == ')')
-            {
-                if (stack.Count > 0)
+                case '(':
+                    stack.Push(c);
+                    break;
+                case ')':
                 {
-                    stack.Pop();
-                    result += " ";
+                    if (stack.Count > 0)
+                    {
+                        stack.Pop();
+                        result += " ";
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    if (stack.Count > 0) result += c;
+
+                    break;
                 }
             }
-            else if (stack.Count > 0)
-            {
-                result += c;
-            }
-        }
 
         Console.WriteLine($"Characters within parentheses: {result}");
     }
-    
-    public static void SolveNonLinearEquation()
+
+    private static void SolveNonLinearEquation()
     {
         double a = -10;
         double b = 10;
-        double epsilon = 0.0001;
+        var epsilon = 0.0001;
 
         if (Function(a) * Function(b) >= 0)
         {
@@ -428,16 +490,16 @@ public class Program
             return;
         }
 
-        double c = a;
+        var c = a;
 
-        while ((b - a) >= epsilon)
+        while (b - a >= epsilon)
         {
             c = (a + b) / 2;
 
             if (Function(c) == 0.0)
                 break;
 
-            else if (Function(c) * Function(a) < 0)
+            if (Function(c) * Function(a) < 0)
                 b = c;
             else
                 a = c;
