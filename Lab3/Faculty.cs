@@ -1,4 +1,6 @@
-﻿namespace Lab3;
+﻿using Utils;
+
+namespace Lab3;
 
 public class Faculty
 {
@@ -32,7 +34,12 @@ public class Faculty
     public int DepartmentsCount
     {
         get => departmentsCount;
-        set => departmentsCount = value;
+        set
+        {
+            departmentsCount = value;
+            specialtiesCount = value; 
+            overallStudentsCount = value * 200;
+        }
     }
 
     public int SpecialtiesCount
@@ -49,14 +56,10 @@ public class Faculty
 
     public void InputData()
     {
-        Console.Write("Enter faculty name: ");
-        name = Console.ReadLine();
-        Console.Write("Enter number of departments: ");
-        departmentsCount = int.Parse(Console.ReadLine());
-        Console.Write("Enter number of specialties: ");
-        specialtiesCount = int.Parse(Console.ReadLine());
-        Console.Write("Enter overall number of students: ");
-        overallStudentsCount = int.Parse(Console.ReadLine());
+        name = Input.ReadAndValidateInput<string>("Enter faculty name: ");
+        departmentsCount = Input.ReadAndValidateInput<int>("Enter number of departments: ");
+        specialtiesCount = Input.ReadAndValidateInput<int>("Enter number of specialties: ");
+        overallStudentsCount = Input.ReadAndValidateInput<int>("Enter overall number of students: ");
     }
 
     public void DisplayData()
@@ -69,21 +72,12 @@ public class Faculty
 
     public void WriteToFile(string fileName)
     {
-        using (StreamWriter writer = new StreamWriter(fileName))
-        {
-            writer.WriteLine($"Faculty Name: {name}");
-            writer.WriteLine($"Number of Departments: {departmentsCount}");
-            writer.WriteLine($"Number of Specialties: {specialtiesCount}");
-            writer.WriteLine($"Overall Number of Students: {overallStudentsCount}");
-        }
+        using var writer = new StreamWriter(fileName);
+        writer.WriteLine($"Faculty Name: {name}");
+        writer.WriteLine($"Number of Departments: {departmentsCount}");
+        writer.WriteLine($"Number of Specialties: {specialtiesCount}");
+        writer.WriteLine($"Overall Number of Students: {overallStudentsCount}");
     }
-
-    public void UpdateDepartmentsAndStudents()
-    {
-        departmentsCount = specialtiesCount;
-        overallStudentsCount = specialtiesCount * 200;
-    }
-
     public class StartupIncubator
     {
         private int startupProjectsCount;
@@ -117,8 +111,10 @@ public class Faculty
 
         public void SelectBestStartupProject()
         {
-            // Initialize a 2D array to store the scores of each project by each expert
-            int[,] scores = new int[5, 10];
+            int expertsCount = 5;
+            int projectsCount = 10;
+            
+            int[,] scores = new int[expertsCount, projectsCount];
             Random random = new Random();
 
             // Fill the scores array with random scores from 1 to 10
@@ -130,31 +126,28 @@ public class Faculty
                 }
             }
 
-            // Calculate the average score for each project
             double[] averages = new double[10];
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < projectsCount; j++)
             {
                 int sum = 0;
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < expertsCount; i++)
                 {
                     sum += scores[i, j];
                 }
-                averages[j] = sum / 5.0;
+                averages[j] = (double)sum / expertsCount;
             }
 
             // Find the project with the lowest average score
-            double minAverage = averages[0];
-            int bestProject = 0;
-            for (int j = 1; j < 10; j++)
+            var minAverage = 0;
+            var bestProject = 0;
+            for (var j = 1; j < 10; j++)
             {
-                if (averages[j] < minAverage)
-                {
-                    minAverage = averages[j];
-                    bestProject = j;
-                }
+                if (averages[j] >= averages[minAverage]) continue;
+                minAverage = j;
+                bestProject = j;
             }
 
-            Console.WriteLine($"The best startup project is project {bestProject + 1} with an average score of {minAverage}.");
+            Console.WriteLine($"The best startup project is project {bestProject + 1} with an average score of {averages[minAverage]}.");
         }
 
         public void CalculateStudentPerformanceRating()

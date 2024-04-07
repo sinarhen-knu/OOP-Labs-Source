@@ -8,7 +8,6 @@ public class Program
         faculty.InputData();
         faculty.DisplayData();
         faculty.WriteToFile("faculty.txt");
-        faculty.UpdateDepartmentsAndStudents();
         faculty.DisplayData();
 
         var startupIncubator = new Faculty.StartupIncubator(10, 100, 10000);
